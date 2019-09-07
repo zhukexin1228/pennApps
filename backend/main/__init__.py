@@ -10,3 +10,10 @@ main = Blueprint('main', __name__, template_folder='templates',
 @main.route('/<path:path>')
 def index(path):
     return render_template('index.html')
+
+
+@main.route('/<path:path>/user')
+def user():
+    print("afasdfhasjk")
+    query = flask.request.args.get("q", None)
+    print(query)
