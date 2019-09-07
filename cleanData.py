@@ -7,6 +7,8 @@ H1b_data = H1b[["JOB_TITLE", "WORKSITE_STATE",
 H1b_data = H1b_data.dropna()
 H1b_data = H1b_data[H1b_data.PW_UNIT_OF_PAY == "Year"]
 
+H1b_data = H1b_data[["JOB_TITLE", "WORKSITE_STATE",
+                     "PW_WAGE_LEVEL", "PREVAILING_WAGE"]]
 H1bClean_csv = H1b_data.to_csv(
     r'/Users/kexin/Desktop/pennApps/H1bClean.csv', index=None, header=True)
 
