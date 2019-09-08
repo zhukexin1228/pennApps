@@ -1,7 +1,7 @@
 import React from "react";
 import Chart from "react-apexcharts";
 import socketIOClient from "socket.io-client";
-const socket = socketIOClient("http://localhost:5000");
+const socket = socketIOClient("http://127.0.0.1:5000");
 
 class FlavorForm extends React.Component {
   constructor(props) {
@@ -9,7 +9,7 @@ class FlavorForm extends React.Component {
     this.state = {
       location: "AL",
       jobtitle: "Account",
-      level: "Level 1",
+      level: "Level I",
       clicked: false
     };
     this.data = {
@@ -204,6 +204,7 @@ class FlavorForm extends React.Component {
 
   getData() {
     socket.emit("send data", this.state);
+    console.log(this.state)
     socket.on("incomming data", response => {
       console.log(response);
       this.data.maxrent = response.max;

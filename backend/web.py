@@ -40,10 +40,14 @@ s = socket(AF_INET, SOCK_STREAM)
 s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 s.bind(('localhost', port))
 s.listen(1)
-while True:
 
-    conn, addr = s.accept()
+conn, addr = s.accept()
+while True:
     data = conn.recv(BUFFER_SIZE)
+    
+    if not data or data[0:3] == 'GET':
+        continue
+    print("data", data)
 
     loaded_model = pickle.load(open('finalized_model.sav', 'rb'))
     title_avg_dict_file = open('title_avg_dict.json', 'r')
@@ -70,4 +74,4 @@ while True:
     res["index"] = getIndex(yPrediction[0], state)
     resJson = json.dumps(res)
 
-    conn.send(res)
+    conn.sendAll(res)
