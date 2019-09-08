@@ -1,6 +1,7 @@
 import React from "react";
-import axios from "axios";
 import Chart from "react-apexcharts";
+import socketIOClient from "socket.io-client";
+const socket = socketIOClient("http://localhost:5000");
 
 class FlavorForm extends React.Component {
   constructor(props) {
@@ -12,8 +13,8 @@ class FlavorForm extends React.Component {
       clicked: false
     };
     this.data = {
-      avgsalary: 5,
-      maxsalary: 10,
+      avgsalary: 100,
+      maxsalary: 200000,
       minsalary: 0,
       avgrent: 5,
       maxrent: 10,
@@ -197,19 +198,20 @@ class FlavorForm extends React.Component {
     this.handleJobTitleChange = this.handleJobTitleChange.bind(this);
     this.handleLevelChange = this.handleLevelChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.getDataAxios = this.getDataAxios.bind(this);
+    this.getData = this.getData.bind(this);
     this.drawGraph = this.drawGraph.bind(this);
   }
 
-  async getDataAxios() {
-    const response = await axios.get("https://localhost:3000/getWage", {
-      data: {
-        location: this.state.location,
-        jobtitle: this.state.jobtitle,
-        level: this.state.level
-      }
+  getData() {
+    socket.emit("send data", this.state);
+    socket.on("incomming data", response => {
+      console.log(response);
+      this.data.maxrent = response.max;
+      this.data.minrent = response.min;
+      this.data.score = response.index;
+      this.data.avgrent = response.avg;
+      this.data.avgsalary = response.predictWage;
     });
-    console.log(response.data);
   }
 
   handleLocationChange(event) {
@@ -233,7 +235,7 @@ class FlavorForm extends React.Component {
       clicked: true
     });
     event.preventDefault();
-    this.getDataAxios();
+    this.getData();
   }
 
   drawGraph() {
