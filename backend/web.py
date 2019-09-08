@@ -29,7 +29,7 @@ for key, val in states.items():
 
 
 def getIndex(wage, state):
-    return math.floor(10 - info[state] / wage * 10)
+    return math.floor(10 - info[state]['avg'] / wage * 10)
 
 
 BUFFER_SIZE = 1024
@@ -67,7 +67,7 @@ while True:
     res["max"] = info[state]['max']
     res["min"] = info[state]['min']
     res['avg'] = info[state]['avg']
-    res["happinessIndes"] = getIndex(yPrediction[0], state)
+    res["index"] = getIndex(yPrediction[0], state)
     resJson = json.dumps(res)
 
     conn.send(res)
